@@ -29,6 +29,16 @@ public class PlayerMovement : MonoBehaviour
         bool aiming = Input.GetButton("Aiming");
 
         MovementManagement(h, v, running);
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            anim.SetBool("BehindCover", !anim.GetBool("BehindCover"));
+        } 
+        
+        if (Input.GetMouseButtonDown(1))
+        {
+            anim.SetBool("Aiming", !anim.GetBool("Aiming"));
+        }
     }
 
     void MovementManagement(float horizontal, float vertical, float running)
