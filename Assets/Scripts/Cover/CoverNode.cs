@@ -6,10 +6,11 @@ public class CoverNode : MonoBehaviour
     public GameObject ConnectionRight;
     public GameObject ConnectionLeft;
 
-    public Vector3 BoundRight;
-    public Vector3 BoundLeft;
+    public Transform BoundRight;
+    public Transform BoundLeft;
 
-    public bool Safe;
+    public bool SafeFromPlayer;
+    public bool SafeFromEnemy;
 
     public bool Occupied;
 
@@ -27,7 +28,7 @@ public class CoverNode : MonoBehaviour
 
     public virtual void Update()
     {
-        if (Vector3.Distance(PersonInCover.transform.position, BoundRight) <= BoundThreshold)
+        if (Vector3.Distance(PersonInCover.transform.position, BoundRight.position) <= BoundThreshold)
         {
             IsAtEdgeRight = true;
         }
@@ -35,7 +36,7 @@ public class CoverNode : MonoBehaviour
         {
             IsAtEdgeRight = false;
         }
-        if (Vector3.Distance(PersonInCover.transform.position, BoundLeft) <= BoundThreshold)
+        if (Vector3.Distance(PersonInCover.transform.position, BoundLeft.position) <= BoundThreshold)
         {
             IsAtEdgeLeft = true;
         }
@@ -55,5 +56,13 @@ public class CoverNode : MonoBehaviour
         PersonInCover = person;
 
         return true;
+    }
+
+    public virtual void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.gameObject.GetComponent<CharacterMovement>().
+        }
     }
 }

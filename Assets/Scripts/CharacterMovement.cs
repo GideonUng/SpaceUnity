@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class CharacterMovement : MonoBehaviour
     private Animator anim;
 
     public bool BehindCover;
+
+    public List<CoverNode> PossibleCovers;
 
     void Awake()
     {
@@ -59,7 +62,6 @@ public class CharacterMovement : MonoBehaviour
         }
         //Temp
 
-
     }
 
     void walkMovementManager(float horizontal, float vertical, float running)
@@ -92,5 +94,10 @@ public class CharacterMovement : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, TurnSmoothing * Time.deltaTime);
         transform.rotation = newRotation;
+    }
+
+    void moveToCover()
+    {
+
     }
 }
