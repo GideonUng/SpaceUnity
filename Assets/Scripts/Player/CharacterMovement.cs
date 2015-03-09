@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerMovement : MonoBehaviour
+public class CharacterMovement : MonoBehaviour
 {
-    public float turnSmoothing = 15;
-    public float speedDampTime = 0.1f;
+    public float TurnSmoothing = 15;
+    public float SpeedDampTime = 0.1f;
+
+    public CoverNode CurentCoverNode;
 
     private Transform mainCameraPos;
-    public Animator anim;
+    private Animator anim;
 
-    void Start()
+    public bool BehindCover;
+
+    void Awake()
     {
         mainCameraPos = GameObject.FindGameObjectWithTag("MainCamera").transform;
         anim = GetComponent<Animator>();
@@ -28,38 +32,65 @@ public class PlayerMovement : MonoBehaviour
         float running = Input.GetAxis("Running");
         bool aiming = Input.GetButton("Aiming");
 
-        MovementManagement(h, v, running);
+        if (BehindCover)
+        {
+            behindCoverMovementManagement(h, v);
+        }
 
+        else if (aiming)
+        {
+            aimingMovementManagement();
+        }
+        else
+        {
+            walkMovementManager(h, v, running);
+        }
+
+
+        //Temp
         if (Input.GetKeyDown(KeyCode.C))
         {
             anim.SetBool("BehindCover", !anim.GetBool("BehindCover"));
-        } 
-        
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             anim.SetBool("Aiming", !anim.GetBool("Aiming"));
         }
+        //Temp
+
+
     }
 
-    void MovementManagement(float horizontal, float vertical, float running)
+    void walkMovementManager(float horizontal, float vertical, float running)
     {
         if (horizontal != 0f || vertical != 0f)
         {
-            Rotating(horizontal, vertical);
-            anim.SetFloat("SpeedForward", 1.51f + running * 5.6f, speedDampTime, Time.deltaTime);
+            rotating(horizontal, vertical);
+            anim.SetFloat("SpeedForward", 1.51f + running * 5.6f, SpeedDampTime, Time.deltaTime);
         }
         else
         {
-            anim.SetFloat("SpeedForward", 0, speedDampTime, Time.deltaTime);
+            anim.SetFloat("SpeedForward", 0, SpeedDampTime, Time.deltaTime);
         }
     }
 
-    void Rotating(float horizontal, float vertical)
+    void aimingMovementManagement()
+    {
+
+    }
+
+    void behindCoverMovementManagement(float horizontal, float vertical)
+    {
+
+    }
+
+    void rotating(float horizontal, float vertical)
     {
         Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
         targetDirection = Quaternion.AngleAxis(mainCameraPos.eulerAngles.y, Vector3.up) * targetDirection;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-        Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, turnSmoothing * Time.deltaTime);
+        Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, TurnSmoothing * Time.deltaTime);
         transform.rotation = newRotation;
     }
 }
