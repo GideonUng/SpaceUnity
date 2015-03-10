@@ -8,67 +8,21 @@ public class CharacterMovement : MonoBehaviour
     public float SpeedDampTime = 0.1f;
 
     public CoverNode CurentCoverNode;
-
-    private Transform mainCameraPos;
-    private Animator anim;
-
     public bool BehindCover;
 
-    public List<CoverNode> PossibleCovers;
-
+    private Animator anim;
     void Awake()
     {
-        mainCameraPos = GameObject.FindGameObjectWithTag("MainCamera").transform;
         anim = GetComponent<Animator>();
     }
 
-    void Update()
-    {
-        if (anim == null)
-        {
-            Debug.Log("No animator Found");
-            return;
-        }
+    //public void MovementMager(float horizontal, float vertical, bool running, bool crouching, bool aiming)
 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        float running = Input.GetAxis("Running");
-        bool aiming = Input.GetButton("Aiming");
-
-        if (BehindCover)
-        {
-            behindCoverMovementManagement(h, v);
-        }
-
-        else if (aiming)
-        {
-            aimingMovementManagement();
-        }
-        else
-        {
-            walkMovementManager(h, v, running);
-        }
-
-
-        //Temp
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            anim.SetBool("BehindCover", !anim.GetBool("BehindCover"));
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            anim.SetBool("Aiming", !anim.GetBool("Aiming"));
-        }
-        //Temp
-
-    }
-
-    void walkMovementManager(float horizontal, float vertical, float running)
+    public void walkMovementManager(float horizontal, float vertical, float running, Quaternion rotation)
     {
         if (horizontal != 0f || vertical != 0f)
         {
-            rotating(horizontal, vertical);
+            rotating(horizontal, vertical, rotation);
             anim.SetFloat("SpeedForward", 1.51f + running * 5.6f, SpeedDampTime, Time.deltaTime);
         }
         else
@@ -77,27 +31,46 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    void aimingMovementManagement()
+    public void aimingMovementManagement()
     {
 
     }
 
-    void behindCoverMovementManagement(float horizontal, float vertical)
+    public void behindCoverMovementManagement(float horizontal, float vertical)
     {
-
+        if (horizontal != 0f || vertical != 0f)
+        {
+            anim.SetFloat("SpeedForward", 1);
+        }
+        else
+        {
+            anim.SetFloat("SpeedForward", 0);
+        }
     }
 
-    void rotating(float horizontal, float vertical)
+    void rotating(float horizontal, float vertical, Quaternion rotation)
     {
         Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
-        targetDirection = Quaternion.AngleAxis(mainCameraPos.eulerAngles.y, Vector3.up) * targetDirection;
+        targetDirection = Quaternion.AngleAxis(rotation.eulerAngles.y, Vector3.up) * targetDirection;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, TurnSmoothing * Time.deltaTime);
         transform.rotation = newRotation;
     }
 
-    void moveToCover()
+    void rotating(Quaternion targetRotation)
     {
+        transform.rotation = targetRotation;
+    }
 
+    void rotating(Vector3 targetPosition)
+    {
+        // if necesary
+    }
+
+    public void moveToCover(CoverNode coverNode, Vector3 targetPosition)
+    {
+        anim.SetBool("BehindCover", true);
+        transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+        transform.rotation = Quaternion.Euler(0, 180 - Quaternion.FromToRotation(coverNode.BoundLeft.transform.position, coverNode.BoundRight.transform.position).eulerAngles.y, 0);
     }
 }

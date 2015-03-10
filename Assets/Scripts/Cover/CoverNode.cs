@@ -57,12 +57,4 @@ public class CoverNode : MonoBehaviour
 
         return true;
     }
-
-    public virtual void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            other.gameObject.GetComponent<CharacterMovement>().
-        }
-    }
 }
