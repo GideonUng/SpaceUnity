@@ -53,8 +53,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
-    secondaryUVAngleDistortion: 2
-    secondaryUVAreaDistortion: 15
+    secondaryUVAngleDistortion: 1
+    secondaryUVAreaDistortion: 8
     secondaryUVHardAngle: 45
     secondaryUVPackMargin: 4
     useFileScale: 1
