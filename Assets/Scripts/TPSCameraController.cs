@@ -32,10 +32,9 @@ public class TPSCameraController : MonoBehaviour
 			GetComponent<Rigidbody>().freezeRotation = true;
 	}
 
-	void Update()
+	void LateUpdate()
 	{
 		transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
-
 
 		if (mouseAcceleration)
 		{
@@ -50,10 +49,7 @@ public class TPSCameraController : MonoBehaviour
 		rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
 		Root.transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
-	}
 
-	void LateUpdate()
-	{
 		RaycastHit hit;
 
 		Physics.Raycast(Root.transform.position, -pivot.transform.forward, out hit, -pivot.localPosition.z);
