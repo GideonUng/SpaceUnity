@@ -11,6 +11,7 @@ public class CharacterMovement : MonoBehaviour
     public bool BehindCover;
 
     private Animator anim;
+	private CoverNode coverNode;
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -38,10 +39,16 @@ public class CharacterMovement : MonoBehaviour
 
     public void behindCoverMovementManagement(float horizontal, float vertical)
     {
-        if (horizontal != 0f || vertical != 0f)
+        if (horizontal >= 0.1f || vertical >= 0.1f)
         {
             anim.SetFloat("SpeedForward", 1);
-        }
+			transform.rotation = Quaternion.Euler(0, 180 - Quaternion.FromToRotation(coverNode.BoundLeft.transform.position, coverNode.BoundRight.transform.position).eulerAngles.y, 0);
+		}
+		else if (horizontal <= -0.1f || vertical <= -0.1f)
+		{
+			transform.rotation = Quaternion.Euler(0, 180 - Quaternion.FromToRotation(coverNode.BoundLeft.transform.position, -coverNode.BoundRight.transform.position).eulerAngles.y, 0);
+			anim.SetFloat("SpeedForward", -1);
+		}
         else
         {
             anim.SetFloat("SpeedForward", 0);
@@ -67,8 +74,9 @@ public class CharacterMovement : MonoBehaviour
         // if necesary
     }
 
-    public void moveToCover(CoverNode coverNode, Vector3 targetPosition)
+    public void moveToCover(CoverNode newCoverNode, Vector3 targetPosition)
     {
+		coverNode = newCoverNode;
         anim.SetBool("BehindCover", true);
         transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
         transform.rotation = Quaternion.Euler(0, 180 - Quaternion.FromToRotation(coverNode.BoundLeft.transform.position, coverNode.BoundRight.transform.position).eulerAngles.y, 0);

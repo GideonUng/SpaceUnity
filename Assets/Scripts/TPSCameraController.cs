@@ -46,8 +46,6 @@ public class TPSCameraController : MonoBehaviour
 		{
 			rotationX += Mathf.Clamp(Input.GetAxis("Mouse X") * sensitivityX, -maxTurnSpeed, maxTurnSpeed);
 			rotationY += Mathf.Clamp(Input.GetAxis("Mouse Y") * sensitivityY, -maxTurnSpeed, maxTurnSpeed);
-
-			Debug.Log(Input.GetAxis("Mouse X"));
 		}
 		rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
@@ -64,12 +62,10 @@ public class TPSCameraController : MonoBehaviour
 
 		if (hit.collider != null)
 		{
-			Debug.Log("Hit");
 			TPSCamera.localPosition = new Vector3(0, 0, Vector3.Distance(pivot.transform.position, hit.point));
 		}
 		else
 		{
-			Debug.Log("Not hit");
 			TPSCamera.transform.localPosition = Vector3.zero;
 		}
 	}
