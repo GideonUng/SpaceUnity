@@ -8,9 +8,11 @@ ModelImporter:
     100000: //RootNode
     100002: Plane
     100004: Plane_001
+    100006: Empty
     400000: //RootNode
     400002: Plane
     400004: Plane_001
+    400006: Empty
     2300000: //RootNode
     2300002: Plane
     2300004: Plane_001
