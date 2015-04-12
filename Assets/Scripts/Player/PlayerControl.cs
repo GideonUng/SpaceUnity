@@ -25,6 +25,7 @@ public class PlayerControl : MonoBehaviour
             return;
         }
 
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         float running = Input.GetAxis("Running");
